@@ -14,11 +14,10 @@ router.post(
   UserController.signUp,
 )
 router.post('/auth/signIn', UserController.signIn)
-
-// router.post('/auth/logOut', UserController.logOut)
+router.post('/auth/logOut', UserController.logOut)
 
 router.get('/activate/:link', UserController.activateUser)
-// router.get('/auth/refresh', UserController.refresh)
+router.get('/auth/refresh', UserController.refresh)
 // router.get('/profile', UserController.getUser)
 
 router.get('/newProducts', ProductsController.getNewProducts)

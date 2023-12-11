@@ -32,6 +32,38 @@ class TokenService {
 
     return newRefreshToken
   }
+
+  async removeRefreshToken(refreshToken) {
+    const tokenData = await UserToken.deleteOne({ refreshToken })
+
+    return tokenData
+  }
+
+  async validateAccessToken(accessToken) {
+    try {
+      const isAccessTokenVerify = jwt.verify(accessToken, accessTokenKey)
+
+      return isAccessTokenVerify
+    } catch (error) {
+      return null
+    }
+  }
+
+  async validateRefreshToken(refreshToken) {
+    try {
+      const isRefreshTokenVerify = jwt.verify(refreshToken, refreshTokenKey)
+
+      return isRefreshTokenVerify
+    } catch (error) {
+      return null
+    }
+  }
+
+  async findRefreshToken(refreshToken) {
+    const isRefreshToken = await UserToken.findOne({ refreshToken })
+
+    return isRefreshToken
+  }
 }
 
 export default new TokenService()

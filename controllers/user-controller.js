@@ -75,68 +75,45 @@ class UserController {
     }
   }
 
-  //   // вихід
-  //   async logOut(req, res, next) {
-  //     try {
-  //       const userToken = await UserToken.findOne({ token: req.cookies.refreshToken })
+  // вихід
+  async logOut(req, res, next) {
+    try {
+      const { refreshToken } = req.cookies
+      const deleteRefreshToken = await UserService.logOutUser(refreshToken)
+      res.clearCookie('accessToken')
+      res.clearCookie('refreshToken')
 
-  //       if (!userToken) {
-  //         return res.status(200).json({ success: true, message: 'Logged Out Successfully' })
-  //       }
+      return res.json({ success: true, message: 'Log out successfully' }).status(200)
+    } catch (error) {
+      next(error)
+    }
+  }
 
-  //       await userToken.deleteOne()
+  // оновлення токену
+  async refresh(req, res, next) {
+    try {
+      const { refreshToken } = req.cookies
 
-  //       res
-  //         .status(200)
-  //         .json({ error: false, message: 'Logged Out Successfully' })
-  //         .cookie('refreshToken', '', {
-  //           httpOnly: true,
-  //           secure: true,
-  //           sameSite: isProduction ? 'strict' : 'lax',
-  //           maxAge: '',
-  //           expires: new Date(),
-  //         })
-  //         .cookie('accessToken', '', {
-  //           httpOnly: true,
-  //           secure: true,
-  //           sameSite: isProduction ? 'strict' : 'lax',
-  //           maxAge: '',
-  //           expires: new Date(),
-  //         })
-  //     } catch (err) {
-  //           next(error)
+      const userData = await UserService.updateRefreshToken(refreshToken)
 
-  //     }
-  //   }
+      // const { accessToken, refreshToken, user } = userData
 
-  //   // оновлення токену
-  //   async refresh(req, res, next) {
-  //     try {
-  //       const { tokenDetails } = await verifyRefreshToken(req.cookies.refreshToken)
-
-  //       const payload = { _id: tokenDetails._id }
-  //       const accessToken = jwt.sign(payload, accessTokenKey, {
-  //         expiresIn: 15 * 60 * 1000,
-  //       })
-
-  //       res
-  //         .cookie('accessToken', accessToken, {
-  //           httpOnly: true,
-  //           secure: true,
-  //           sameSite: isProduction ? 'strict' : 'lax',
-  //           maxAge: 15 * 60 * 1000,
-  //         })
-  //         .status(200)
-  //         .json({
-  //           error: false,
-  //           accessToken,
-  //           message: 'Access token created successfully',
-  //         })
-  //     } catch (err) {
-  //             next(error)
-
-  //     }
-  //   }
+      // res
+      //   .cookie('refreshToken', refreshToken, {
+      //     httpOnly: true,
+      //     secure: true,
+      //     maxAge: 30 * 24 * 60 * 60 * 1000,
+      //   })
+      //   .cookie('accessToken', accessToken, {
+      //     httpOnly: true,
+      //     secure: true,
+      //     maxAge: 15 * 60 * 1000,
+      //   })
+      return res.json({ success: true, message: 'Log in successfully', user }).status(200)
+    } catch (error) {
+      next(error)
+    }
+  }
 
   //   // отримання користувача
   //   async getUser(req, res, next) {

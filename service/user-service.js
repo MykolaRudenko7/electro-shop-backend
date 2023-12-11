@@ -1,11 +1,10 @@
 import { v4 } from 'uuid'
-import { body, check } from 'express-validator'
 import bcrypt, { compare } from 'bcrypt'
 import TokenService from './token-service.js'
+import ApiError from '../exceptions/api-error.js'
 import MailService from './mail-service.js'
 import { electroShopBackendAddress, salt } from '../data/config.js'
 import User from '../models/User.js'
-import ApiError from '../exceptions/api-error.js'
 
 class UserService {
   async signUpUser(name, email, password, mobileNumber) {
@@ -54,11 +53,7 @@ class UserService {
     user.isActivated = true
     await user.save()
   }
-  //
-  //
-  //
-  //
-  //
+
   async signInUser(email, password) {
     const user = await User.findOne({ email }).select('+password')
 
@@ -102,6 +97,30 @@ class UserService {
 
     const { accessToken, refreshToken } = await TokenService.generateTokens(user._id, user.email)
 
+    await TokenService.saveRefreshToken(user._id, refreshToken)
+
+    return { accessToken, refreshToken, user }
+  }
+
+  async logOutUser(refreshToken) {
+    const token = await TokenService.removeRefreshToken(refreshToken)
+
+    return token
+  }
+
+  async updateRefreshToken(token) {
+    if (!token) {
+      throw ApiError.UnauthorizedError()
+    }
+    const isRefreshTokenValid = await TokenService.validateRefreshToken(token)
+    const isRefreshTokenFromDb = await TokenService.findRefreshToken(token)
+
+    if (!isRefreshTokenValid || !isRefreshTokenFromDb) {
+      throw ApiError.UnauthorizedError()
+    }
+
+    const user = await User.findById(isRefreshTokenValid._id)
+    const { accessToken, refreshToken } = await TokenService.generateTokens(user._id, user.email)
     await TokenService.saveRefreshToken(user._id, refreshToken)
 
     return { accessToken, refreshToken, user }
