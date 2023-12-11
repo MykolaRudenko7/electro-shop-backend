@@ -14,9 +14,7 @@ export default async function (req, res, next) {
       return next(ApiError.UnauthorizedError())
     }
 
-    console.log('accessToken', accessToken)
     const isAccessTokenValid = await TokenService.validateAccessToken(accessToken)
-    console.log('accessTokenValid', !!isAccessTokenValid)
 
     if (!isAccessTokenValid) {
       return next(ApiError.UnauthorizedError())

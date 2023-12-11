@@ -122,12 +122,12 @@ class UserController {
     }
   }
 
+  // можна через next.js
   async getUserInfo(req, res, next) {
-    const { refreshToken } = req.cookies
-
     try {
-      const user = await UserService.getUser(refreshToken)
+      const user = await UserService.getUser(req.user.payload)
 
+      console.log(user)
       return res.json(user)
     } catch (error) {
       next(error)

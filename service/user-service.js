@@ -132,17 +132,8 @@ class UserService {
     return users
   }
 
-  async getUser(token) {
-    if (!token) {
-      throw ApiError.UnauthorizedError()
-    }
-    const isRefreshTokenValid = await TokenService.validateRefreshToken(token)
-    const isRefreshTokenFromDb = await TokenService.findRefreshToken(token)
-
-    if (!isRefreshTokenValid || !isRefreshTokenFromDb) {
-      throw ApiError.UnauthorizedError()
-    }
-    const user = await User.findById(isRefreshTokenValid.payload)
+  async getUser(id) {
+    const user = await User.findById(id)
 
     return user
   }
