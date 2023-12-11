@@ -17,6 +17,7 @@ const connectToMongoDB = async () => {
     return cached.conn
   }
   cached.conn = await mongoose.connect(mongoDbURL)
+
   return cached.conn
 }
 

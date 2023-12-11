@@ -1,24 +1,63 @@
+import { validationResult } from 'express-validator'
 import { electroShopClientAddress } from '../data/config.js'
 import UserService from '../service/user-service.js'
+import ApiError from '../exceptions/api-error.js'
 
 class UserController {
   async signUp(req, res, next) {
     try {
-      // витягую дані з форми реєстрації
+      const validateErrors = validationResult(req)
+
+      if (!validateErrors.isEmpty()) {
+        return next(ApiError.BadRequest('Validate Error', validateErrors.array()))
+      }
       const { name_newUser, email_newUser, password_newUser, mobileNumber_newUser } = await req.body
 
-      // передаю ці поля і зберігаю користувача. Повертаю токени і збереженого користувача
-      const userData = await UserService.registration(
+      const userData = await UserService.signUpUser(
         name_newUser,
         email_newUser,
         password_newUser,
         mobileNumber_newUser,
       )
 
-      // витягую токени
       const { accessToken, refreshToken, user } = userData
 
-      // встановлюю токени
+      res
+        .cookie('refreshToken', refreshToken, {
+          httpOnly: true,
+          secure: true,
+          maxAge: 30 * 24 * 60 * 60 * 1000,
+        })
+        .cookie('accessToken', accessToken, {
+          httpOnly: true,
+          secure: true,
+          maxAge: 15 * 60 * 1000,
+        })
+
+      return res.json({ success: true, message: 'Registration was successful', user }).status(200)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async activateUser(req, res, next) {
+    try {
+      const activationLink = req.params.link
+      await UserService.activate(activationLink)
+      return res.redirect(electroShopClientAddress)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async signIn(req, res, next) {
+    try {
+      const { email_signIn, password_signIn } = await req.body
+
+      const userData = await UserService.signInUser(email_signIn, password_signIn)
+
+      const { accessToken, refreshToken, user } = userData
+
       res
         .cookie('refreshToken', refreshToken, {
           httpOnly: true,
@@ -32,103 +71,9 @@ class UserController {
         })
       return res.json({ success: true, message: 'Log in successfully', user }).status(200)
     } catch (error) {
-      console.log('error', error)
-      return res.status(500).json({ success: false, error: error.message })
+      next(error)
     }
   }
-
-  async activateUser(req, res, next) {
-    try {
-      const activationLink = req.params.link
-      await UserService.activate(activationLink)
-      return res.redirect(electroShopClientAddress)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-  //   // вхід
-  //   async signIn(req, res, next) {
-  //     try {
-  //       const { email_signIn, password_signIn } = await req.body
-
-  //       if (!email_signIn) {
-  //         return res.status(400).json({ success: false, error: 'Email is required' })
-  //       }
-
-  //       if (!password_signIn) {
-  //         return res.status(400).json({ success: false, error: 'Password is required' })
-  //       }
-
-  //       const user = await User.findOne({ email: email_signIn }).select('+password')
-
-  //       if (!user) {
-  //         return res.status(400).json({ success: false, error: 'User with email does not exist' })
-  //       }
-
-  //       if (user.lockUntil === Infinity) {
-  //         return res
-  //           .status(403)
-  //           .json({ success: false, error: 'Account is locked. Please contact support.' })
-  //       }
-
-  //       if (user.lockUntil && user.lockUntil > Date.now()) {
-  //         const minutesLeft = Math.ceil((user.lockUntil - Date.now()) / (60 * 1000))
-
-  //         return res.status(403).json({
-  //           success: false,
-  //           error: `Too many login attempts. Please try again after ${minutesLeft} minutes.`,
-  //         })
-  //       }
-
-  //       const isPasswordCorrect = await compare(password_signIn, user.password)
-
-  //       if (!isPasswordCorrect) {
-  //         user.loginAttempts += 1
-
-  //         if (user.loginAttempts >= 5 && user.lockUntil === null) {
-  //           user.lockUntil = Date.now() + 3 * 60 * 1000
-  //         } else if (user.loginAttempts >= 10) {
-  //           user.lockUntil = Infinity
-  //         }
-
-  //         await user.save()
-  //         const remainingAttempts = 10 - user.loginAttempts
-
-  //         return res.status(401).json({
-  //           success: false,
-  //           error: `Password is incorrect. Remaining attempts: ${remainingAttempts + 1}`,
-  //         })
-  //       }
-
-  //       user.loginAttempts = 0
-  //       user.lockUntil = null
-  //       await user.save()
-
-  //       const { accessToken, refreshToken } = await generateTokens(user._id)
-
-  //       return res
-  //         .cookie('refreshToken', refreshToken, {
-  //           httpOnly: true,
-  //           secure: true,
-  //           sameSite: isProduction ? 'strict' : 'lax',
-  //           maxAge: 30 * 24 * 60 * 60 * 1000,
-  //         })
-  //         .cookie('accessToken', accessToken, {
-  //           httpOnly: true,
-  //           secure: true,
-  //           sameSite: isProduction ? 'strict' : 'lax',
-  //           maxAge: 15 * 60 * 1000,
-  //         })
-  //         .status(201)
-  //         .json({
-  //           success: true,
-  //           message: 'Log in successfully',
-  //           user,
-  //         })
-  //     } catch (error) {
-  //       return res.status(500).json({ success: false, error: error.message })
-  //     }
-  //   }
 
   //   // вихід
   //   async logOut(req, res, next) {
@@ -159,7 +104,8 @@ class UserController {
   //           expires: new Date(),
   //         })
   //     } catch (err) {
-  //       res.status(500).json({ error: true, message: 'Internal Server Error' })
+  //           next(error)
+
   //     }
   //   }
 
@@ -187,7 +133,8 @@ class UserController {
   //           message: 'Access token created successfully',
   //         })
   //     } catch (err) {
-  //       res.status(400).json(err)
+  //             next(error)
+
   //     }
   //   }
 
@@ -219,9 +166,12 @@ class UserController {
   //         user,
   //       })
   //     } catch (error) {
-  //       return res.status(500).json({ success: false, message: error.message })
+  //             next(error)
+
   //     }
   //   }
 }
 
 export default new UserController()
+
+// return res.status(500).json({ success: false, error: error.message })

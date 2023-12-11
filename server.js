@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser'
 import { config } from 'dotenv'
 import connectToMongoDB from './utils/db.js'
 import router from './routes/index.js'
+import errorMiddleware from './middlewares/error-middleware.js'
 
 config()
 
@@ -20,6 +21,7 @@ app.use(
   }),
 )
 app.use('/api', router)
+app.use(errorMiddleware)
 
 const start = async () => {
   try {
