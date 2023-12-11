@@ -1,7 +1,8 @@
 import mongoose from 'mongoose'
-import { usersCollection } from '../data/config.js'
+import { mongoConfig } from '../data/config.js'
 
 const { Schema, model, models } = mongoose
+const { usersCollection } = mongoConfig
 
 const userSchema = new Schema({
   name: {

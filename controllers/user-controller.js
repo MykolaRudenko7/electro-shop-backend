@@ -1,7 +1,9 @@
 import { validationResult } from 'express-validator'
-import { electroShopClientAddress } from '../data/config.js'
+import { appAddresses } from '../data/config.js'
 import UserService from '../service/user-service.js'
 import ApiError from '../exceptions/api-error.js'
+
+const { electroShopClientAddress } = appAddresses
 
 class UserController {
   async signUp(req, res, next) {

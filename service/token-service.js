@@ -1,11 +1,8 @@
 import jwt from 'jsonwebtoken'
-import {
-  accessTokenExpires,
-  accessTokenKey,
-  refreshTokenExpires,
-  refreshTokenKey,
-} from '../data/config.js'
+import { tokenConfig } from '../data/config.js'
 import UserToken from '../models/UserToken.js'
+
+const { accessTokenExpires, accessTokenKey, refreshTokenExpires, refreshTokenKey } = tokenConfig
 
 class TokenService {
   async generateTokens(payload) {

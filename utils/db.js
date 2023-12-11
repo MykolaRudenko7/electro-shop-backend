@@ -1,5 +1,7 @@
 import mongoose from 'mongoose'
-import { mongoDbURL } from '../data/config.js'
+import { mongoConfig } from '../data/config.js'
+
+const { mongoDbURL } = mongoConfig
 
 if (!mongoDbURL) {
   throw new Error('MONGO_URL is not defined.')

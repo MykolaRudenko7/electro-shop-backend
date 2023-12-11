@@ -3,8 +3,10 @@ import bcrypt, { compare } from 'bcrypt'
 import TokenService from './token-service.js'
 import ApiError from '../exceptions/api-error.js'
 import MailService from './mail-service.js'
-import { electroShopBackendAddress, salt } from '../data/config.js'
+import { appAddresses, salt } from '../data/config.js'
 import User from '../models/User.js'
+
+const { electroShopBackendAddress } = appAddresses
 
 class UserService {
   async signUpUser(name, email, password, mobileNumber) {

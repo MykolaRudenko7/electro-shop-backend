@@ -1,11 +1,8 @@
 import nodemailer from 'nodemailer'
-import {
-  electroShopBackendAddress,
-  mailAddress,
-  mailPassword,
-  smprtHost,
-  smprtPort,
-} from '../data/config.js'
+import { appAddresses, nodemailerConfig } from '../data/config.js'
+
+const { mailAddress, mailPassword, smprtHost, smprtPort } = nodemailerConfig
+const { electroShopBackendAddress } = appAddresses
 
 class MailService {
   constructor() {

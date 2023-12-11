@@ -1,7 +1,8 @@
 import mongoose from 'mongoose'
-import { tokensCollection } from '../data/config.js'
+import { mongoConfig } from '../data/config.js'
 
 const { Schema, model, models } = mongoose
+const { tokensCollection } = mongoConfig
 
 const userTokenSchema = new Schema({
   user: { type: Schema.Types.ObjectId, ref: 'User' },

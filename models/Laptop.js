@@ -1,7 +1,8 @@
 import mongoose from 'mongoose'
-import { laptopsCollection } from '../data/config.js'
+import { mongoConfig } from '../data/config.js'
 
 const { Schema, model, models } = mongoose
+const { laptopsCollection } = mongoConfig
 
 const laptopSchema = new Schema({
   inStock: {

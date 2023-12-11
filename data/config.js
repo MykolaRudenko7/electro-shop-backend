@@ -3,28 +3,31 @@ import crypto from 'crypto'
 
 config()
 
-// export const accessTokenKey = crypto.randomBytes(256).toString('base64')
-// export const refreshTokenKey = crypto.randomBytes(256).toString('base64')
-export const accessTokenKey = 'I5G9X3mT9OG9hxOpanN4u20OF2bNoTAJpvX0wRLEheOkmwOJqb'
-export const refreshTokenKey = 'Hyy1O0Ve1eCtJBy3DzUZ0GIgZL27/T4u22jzedTMGb9wjWIUwUx'
+export const mongoConfig = {
+  mongoDbURL: process.env.MONGODB_URL,
+  usersCollection: process.env.USERS_COLLECTION,
+  tokensCollection: process.env.TOKENS_COLLECTION,
+  laptopsCollection: process.env.LAPTOPS_COLLECTION,
+  newProductsCollection: process.env.NEW_PRODUCTS_COLLECTION,
+}
 
-export const accessTokenExpires = process.env.ACCESS_TOKEN_EXPIRES_IN
-export const refreshTokenExpires = process.env.REFRESH_TOKEN_EXPIRES_IN
+export const nodemailerConfig = {
+  smprtHost: process.env.SMPRT_HOST,
+  smprtPort: process.env.SMPRT_PORT,
+  mailAddress: process.env.MAIL_ADDRESS,
+  mailPassword: process.env.MAIL_PASSWORD,
+}
+
+export const tokenConfig = {
+  accessTokenKey: crypto.randomBytes(32).toString('hex'),
+  refreshTokenKey: crypto.randomBytes(32).toString('hex'),
+  accessTokenExpires: process.env.ACCESS_TOKEN_EXPIRES_IN,
+  refreshTokenExpires: process.env.REFRESH_TOKEN_EXPIRES_IN,
+}
+
+export const appAddresses = {
+  client: process.env.CLIENT_URL,
+  backend: process.env.BACKEND_URL,
+}
 
 export const salt = process.env.SALT
-
-export const mongoDbURL = process.env.MONGODB_URL
-export const usersCollection = process.env.USERS_COLLECTION
-export const tokensCollection = process.env.TOKENS_COLLECTION
-export const laptopsCollection = process.env.LAPTOPS_COLLECTION
-export const newProductsCollection = process.env.NEW_PRODUCTS_COLLECTION
-
-export const smprtHost = process.env.SMPRT_HOST
-export const smprtPort = process.env.SMPRT_PORT
-export const mailAddress = process.env.MAIL_ADDRESS
-export const mailPassword = process.env.MAIL_PASSWORD
-
-export const electroShopClientAddress = process.env.CLIENT_URL
-export const electroShopBackendAddress = process.env.BACKEND_URL
-
-export const isProduction = process.env.NODE_ENV === 'production'
