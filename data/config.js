@@ -3,8 +3,10 @@ import crypto from 'crypto'
 
 config()
 
-export const accessTokenKey = crypto.randomBytes(256).toString('base64')
-export const refreshTokenKey = crypto.randomBytes(256).toString('base64')
+// export const accessTokenKey = crypto.randomBytes(256).toString('base64')
+// export const refreshTokenKey = crypto.randomBytes(256).toString('base64')
+export const accessTokenKey = 'I5G9X3mT9OG9hxOpanN4u20OF2bNoTAJpvX0wRLEheOkmwOJqb'
+export const refreshTokenKey = 'Hyy1O0Ve1eCtJBy3DzUZ0GIgZL27/T4u22jzedTMGb9wjWIUwUx'
 
 export const accessTokenExpires = process.env.ACCESS_TOKEN_EXPIRES_IN
 export const refreshTokenExpires = process.env.REFRESH_TOKEN_EXPIRES_IN

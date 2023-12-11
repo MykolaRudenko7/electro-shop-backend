@@ -75,7 +75,6 @@ class UserController {
     }
   }
 
-  // вихід
   async logOut(req, res, next) {
     try {
       const { refreshToken } = req.cookies
@@ -89,64 +88,51 @@ class UserController {
     }
   }
 
-  // оновлення токену
   async refresh(req, res, next) {
     try {
       const { refreshToken } = req.cookies
 
       const userData = await UserService.updateRefreshToken(refreshToken)
+      const { newAccessToken, newRefreshToken, user } = userData
+      res
+        .cookie('refreshToken', newRefreshToken, {
+          httpOnly: true,
+          secure: true,
+          maxAge: 30 * 24 * 60 * 60 * 1000,
+        })
+        .cookie('accessToken', newAccessToken, {
+          httpOnly: true,
+          secure: true,
+          maxAge: 15 * 60 * 1000,
+        })
 
-      // const { accessToken, refreshToken, user } = userData
-
-      // res
-      //   .cookie('refreshToken', refreshToken, {
-      //     httpOnly: true,
-      //     secure: true,
-      //     maxAge: 30 * 24 * 60 * 60 * 1000,
-      //   })
-      //   .cookie('accessToken', accessToken, {
-      //     httpOnly: true,
-      //     secure: true,
-      //     maxAge: 15 * 60 * 1000,
-      //   })
-      return res.json({ success: true, message: 'Log in successfully', user }).status(200)
+      return res.json(user).status(200)
     } catch (error) {
       next(error)
     }
   }
 
-  //   // отримання користувача
-  //   async getUser(req, res, next) {
-  //     try {
-  //       const accessToken = req.cookies.accessToken
+  async getAllUsers(req, res, next) {
+    try {
+      const users = await UserService.getUsers()
 
-  //       if (!accessToken) {
-  //         return res.status(401).json({ success: false, message: 'No access token provided' })
-  //       }
+      return res.json(users)
+    } catch (error) {
+      next(error)
+    }
+  }
 
-  //       let payload
-  //       try {
-  //         payload = jwt.verify(accessToken, accessTokenKey)
-  //       } catch (err) {
-  //         return res.status(401).json({ success: false, message: 'Invalid or expired token' })
-  //       }
+  async getUserInfo(req, res, next) {
+    const { refreshToken } = req.cookies
 
-  //       const user = await User.findOne({ _id: payload._id })
+    try {
+      const user = await UserService.getUser(refreshToken)
 
-  //       if (!user) {
-  //         return res.status(400).json({ success: false, message: 'User does not exist' })
-  //       }
-
-  //       return res.json({
-  //         success: true,
-  //         accessToken,
-  //         user,
-  //       })
-  //     } catch (error) {
-  //             next(error)
-
-  //     }
-  //   }
+      return res.json(user)
+    } catch (error) {
+      next(error)
+    }
+  }
 }
 
 export default new UserController()

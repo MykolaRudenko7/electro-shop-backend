@@ -119,11 +119,32 @@ class UserService {
       throw ApiError.UnauthorizedError()
     }
 
-    const user = await User.findById(isRefreshTokenValid._id)
+    const user = await User.findById(isRefreshTokenValid.payload)
     const { accessToken, refreshToken } = await TokenService.generateTokens(user._id, user.email)
     await TokenService.saveRefreshToken(user._id, refreshToken)
 
-    return { accessToken, refreshToken, user }
+    return { newAccessToken: accessToken, newRefreshToken: refreshToken, user }
+  }
+
+  async getUsers() {
+    const users = await User.find()
+
+    return users
+  }
+
+  async getUser(token) {
+    if (!token) {
+      throw ApiError.UnauthorizedError()
+    }
+    const isRefreshTokenValid = await TokenService.validateRefreshToken(token)
+    const isRefreshTokenFromDb = await TokenService.findRefreshToken(token)
+
+    if (!isRefreshTokenValid || !isRefreshTokenFromDb) {
+      throw ApiError.UnauthorizedError()
+    }
+    const user = await User.findById(isRefreshTokenValid.payload)
+
+    return user
   }
 }
 

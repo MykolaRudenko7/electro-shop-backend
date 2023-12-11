@@ -2,6 +2,7 @@ import { Router } from 'express'
 import ProductsController from '../controllers/products-controller.js'
 import UserController from '../controllers/user-controller.js'
 import { body } from 'express-validator'
+import authMiddleware from '../middlewares/auth-middleware.js'
 
 const router = new Router()
 
@@ -18,7 +19,8 @@ router.post('/auth/logOut', UserController.logOut)
 
 router.get('/activate/:link', UserController.activateUser)
 router.get('/auth/refresh', UserController.refresh)
-// router.get('/profile', UserController.getUser)
+router.get('/users', authMiddleware, UserController.getAllUsers)
+router.get('/profile', UserController.getUserInfo)
 
 router.get('/newProducts', ProductsController.getNewProducts)
 router.get('/laptops', ProductsController.getLaptops)
