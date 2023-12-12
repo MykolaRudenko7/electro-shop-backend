@@ -1,5 +1,6 @@
 import { validationResult } from 'express-validator'
 import { appAddresses } from '../data/config.js'
+import TokenService from '../service/token-service.js'
 import UserService from '../service/user-service.js'
 import ApiError from '../exceptions/api-error.js'
 
@@ -22,21 +23,7 @@ class UserController {
         mobileNumber_newUser,
       )
 
-      const { accessToken, refreshToken, user } = userData
-
-      res
-        .cookie('refreshToken', refreshToken, {
-          httpOnly: true,
-          secure: true,
-          maxAge: 30 * 24 * 60 * 60 * 1000,
-        })
-        .cookie('accessToken', accessToken, {
-          httpOnly: true,
-          secure: true,
-          maxAge: 15 * 60 * 1000,
-        })
-
-      return res.json({ success: true, message: 'Registration was successful', user }).status(200)
+      return TokenService.handleSetResponse(res, userData, 'Registration was successful')
     } catch (error) {
       next(error)
     }
@@ -46,6 +33,7 @@ class UserController {
     try {
       const activationLink = req.params.link
       await UserService.activate(activationLink)
+
       return res.redirect(electroShopClientAddress)
     } catch (error) {
       next(error)
@@ -55,23 +43,9 @@ class UserController {
   async signIn(req, res, next) {
     try {
       const { email_signIn, password_signIn } = await req.body
-
       const userData = await UserService.signInUser(email_signIn, password_signIn)
 
-      const { accessToken, refreshToken, user } = userData
-
-      res
-        .cookie('refreshToken', refreshToken, {
-          httpOnly: true,
-          secure: true,
-          maxAge: 30 * 24 * 60 * 60 * 1000,
-        })
-        .cookie('accessToken', accessToken, {
-          httpOnly: true,
-          secure: true,
-          maxAge: 15 * 60 * 1000,
-        })
-      return res.json({ success: true, message: 'Log in successfully', user }).status(200)
+      return TokenService.handleSetResponse(res, userData, 'Log in successfully')
     } catch (error) {
       next(error)
     }
@@ -93,22 +67,9 @@ class UserController {
   async refresh(req, res, next) {
     try {
       const { refreshToken } = req.cookies
-
       const userData = await UserService.updateRefreshToken(refreshToken)
-      const { newAccessToken, newRefreshToken, user } = userData
-      res
-        .cookie('refreshToken', newRefreshToken, {
-          httpOnly: true,
-          secure: true,
-          maxAge: 30 * 24 * 60 * 60 * 1000,
-        })
-        .cookie('accessToken', newAccessToken, {
-          httpOnly: true,
-          secure: true,
-          maxAge: 15 * 60 * 1000,
-        })
 
-      return res.json(user).status(200)
+      return TokenService.handleSetResponse(res, userData, 'Refresh successful')
     } catch (error) {
       next(error)
     }
@@ -124,12 +85,10 @@ class UserController {
     }
   }
 
-  // можна через next.js
   async getUserInfo(req, res, next) {
     try {
       const user = await UserService.getUser(req.user.payload)
 
-      console.log(user)
       return res.json(user)
     } catch (error) {
       next(error)

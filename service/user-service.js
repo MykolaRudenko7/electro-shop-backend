@@ -125,7 +125,7 @@ class UserService {
     const { accessToken, refreshToken } = await TokenService.generateTokens(user._id, user.email)
     await TokenService.saveRefreshToken(user._id, refreshToken)
 
-    return { newAccessToken: accessToken, newRefreshToken: refreshToken, user }
+    return { accessToken, refreshToken, user }
   }
 
   async getUsers() {

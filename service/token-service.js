@@ -61,6 +61,24 @@ class TokenService {
 
     return isRefreshToken
   }
+
+  async handleSetResponse(res, userData, message) {
+    const { accessToken, refreshToken, user } = userData
+
+    res
+      .cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        secure: true,
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+      })
+      .cookie('accessToken', accessToken, {
+        httpOnly: true,
+        secure: true,
+        maxAge: 15 * 60 * 1000,
+      })
+
+    return res.json({ success: true, message: message, user }).status(200)
+  }
 }
 
 export default new TokenService()
