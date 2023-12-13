@@ -19,7 +19,6 @@ router.post('/auth/logOut', UserController.logOut)
 
 router.get('/activate/:link', UserController.activateUser)
 router.get('/auth/refresh', UserController.refresh)
-router.get('/users', authMiddleware, UserController.getAllUsers)
 router.get('/profile', authMiddleware, UserController.getUserInfo)
 
 router.get('/newProducts', ProductsController.getNewProducts)

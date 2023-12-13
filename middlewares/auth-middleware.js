@@ -3,13 +3,8 @@ import TokenService from '../service/token-service.js'
 
 export default async function (req, res, next) {
   try {
-    const authorizationHeader = req.headers.authorization
+    const { accessToken } = req.cookies
 
-    if (!authorizationHeader) {
-      return next(ApiError.UnauthorizedError())
-    }
-
-    const accessToken = authorizationHeader.split(' ')[1]
     if (!accessToken) {
       return next(ApiError.UnauthorizedError())
     }
@@ -20,7 +15,7 @@ export default async function (req, res, next) {
       return next(ApiError.UnauthorizedError())
     }
 
-    req.user = isAccessTokenValid
+    req.userId = isAccessTokenValid.payload
     next()
   } catch (error) {
     return next(ApiError.UnauthorizedError())

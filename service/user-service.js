@@ -128,12 +128,6 @@ class UserService {
     return { accessToken, refreshToken, user }
   }
 
-  async getUsers() {
-    const users = await User.find()
-
-    return users
-  }
-
   async getUser(id) {
     const user = await User.findById(id)
 

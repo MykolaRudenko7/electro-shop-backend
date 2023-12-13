@@ -19,8 +19,8 @@ export const nodemailerConfig = {
 }
 
 export const tokenConfig = {
-  accessTokenKey: crypto.randomBytes(32).toString('hex'),
-  refreshTokenKey: crypto.randomBytes(32).toString('hex'),
+  accessTokenKey: process.env.ACCESS_TOKEN_KEY,
+  refreshTokenKey: process.env.REFRESH_TOKEN_KEY,
   accessTokenExpires: process.env.ACCESS_TOKEN_EXPIRES_IN,
   refreshTokenExpires: process.env.REFRESH_TOKEN_EXPIRES_IN,
 }

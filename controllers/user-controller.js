@@ -75,21 +75,11 @@ class UserController {
     }
   }
 
-  async getAllUsers(req, res, next) {
-    try {
-      const users = await UserService.getUsers()
-
-      return res.json(users)
-    } catch (error) {
-      next(error)
-    }
-  }
-
   async getUserInfo(req, res, next) {
     try {
-      const user = await UserService.getUser(req.user.payload)
+      const user = await UserService.getUser(req.userId)
 
-      return res.json(user)
+      return res.json({ success: true, message: 'Success', user })
     } catch (error) {
       next(error)
     }
@@ -97,5 +87,3 @@ class UserController {
 }
 
 export default new UserController()
-
-// return res.status(500).json({ success: false, error: error.message })
