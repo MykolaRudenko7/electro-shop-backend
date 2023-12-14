@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { body } from 'express-validator'
 import ProductsController from '../controllers/products-controller.js'
 import UserController from '../controllers/user-controller.js'
+import CartController from '../controllers/cart-controller.js'
 import authMiddleware from '../middlewares/auth-middleware.js'
 
 const router = new Router()
@@ -16,6 +17,7 @@ router.post(
 )
 router.post('/auth/signIn', UserController.signIn)
 router.post('/auth/logOut', UserController.logOut)
+router.post('/cartForm', authMiddleware, CartController.shippingHandler)
 
 router.get('/activate/:link', UserController.activateUser)
 router.get('/auth/refresh', UserController.refresh)
