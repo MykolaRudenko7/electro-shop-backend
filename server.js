@@ -2,10 +2,10 @@ import express from 'express'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import { config } from 'dotenv'
-import connectToMongoDB from './utils/db.js'
-import router from './routes/index.js'
-import errorMiddleware from './middlewares/error-middleware.js'
-import { appAddresses } from './data/config.js'
+import connectToMongoDB from './src/utils/db.js'
+import router from './src/routes/index.js'
+import errorMiddleware from './src/middlewares/error-middleware.js'
+import { appAddresses } from './src/data/config.js'
 
 config()
 

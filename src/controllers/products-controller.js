@@ -24,9 +24,8 @@ class ProductsController {
       if (!newProducts) {
         throw ApiError.BadRequest('New Products not found')
       }
-      return res.json(newProducts).status(200)
 
-      return res.json({ error: 'Internal Server Error' }).status(500)
+      return res.json(newProducts).status(200)
     } catch (error) {
       next(error)
     }
