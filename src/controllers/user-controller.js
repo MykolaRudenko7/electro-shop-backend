@@ -4,7 +4,7 @@ import TokenService from '../service/token-service.js'
 import UserService from '../service/user-service.js'
 import ApiError from '../exceptions/api-error.js'
 
-const { electroShopClientAddress } = appAddresses
+const { client } = appAddresses
 
 class UserController {
   async signUp(req, res, next) {
@@ -34,7 +34,7 @@ class UserController {
       const activationLink = req.params.link
       await UserService.activate(activationLink)
 
-      return res.redirect(electroShopClientAddress)
+      return res.redirect(client)
     } catch (error) {
       next(error)
     }

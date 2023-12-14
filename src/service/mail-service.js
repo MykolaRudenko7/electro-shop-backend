@@ -2,7 +2,7 @@ import nodemailer from 'nodemailer'
 import { appAddresses, nodemailerConfig } from '../data/config.js'
 
 const { mailAddress, mailPassword, smprtHost, smprtPort } = nodemailerConfig
-const { electroShopBackendAddress } = appAddresses
+const { backend } = appAddresses
 
 class MailService {
   constructor() {
@@ -22,7 +22,7 @@ class MailService {
     await this.transporter.sendMail({
       from: mailAddress,
       to,
-      subject: `Account activation on ${electroShopBackendAddress}`,
+      subject: `Account activation on ${backend}`,
       text: '',
       html: `
         <div>

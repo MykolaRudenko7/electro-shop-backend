@@ -6,7 +6,7 @@ import MailService from './mail-service.js'
 import { appAddresses, salt } from '../data/config.js'
 import User from '../models/User.js'
 
-const { electroShopBackendAddress } = appAddresses
+const { backend } = appAddresses
 
 class UserService {
   async signUpUser(name, email, password, mobileNumber) {
@@ -21,7 +21,7 @@ class UserService {
     const hashPassword = await bcrypt.hash(password, quantitySalt)
 
     const activationLink = v4()
-    const fullActivationLink = `${electroShopBackendAddress}/api/activate/${activationLink}`
+    const fullActivationLink = `${backend}/api/activate/${activationLink}`
 
     const newUser = await User.create({
       name,
