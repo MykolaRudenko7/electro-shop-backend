@@ -20,7 +20,7 @@ router.post('/auth/logOut', UserController.logOut)
 router.post('/cartForm', authMiddleware, CartController.shippingHandler)
 
 router.get('/activate/:link', UserController.activateUser)
-router.get('/auth/refresh', UserController.refresh)
+router.post('/auth/refresh', UserController.refresh)
 router.get('/profile', authMiddleware, UserController.getUserInfo)
 
 router.get('/newProducts', ProductsController.getNewProducts)

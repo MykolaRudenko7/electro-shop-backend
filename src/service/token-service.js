@@ -77,7 +77,12 @@ class TokenService {
         maxAge: 15 * 60 * 1000,
       })
 
-    return res.json({ success: true, message: message, user }).status(200)
+    return (
+      res
+        // я тепер передаю тут і токени
+        .json({ success: true, message: message, user, accessToken, refreshToken })
+        .status(200)
+    )
   }
 }
 
