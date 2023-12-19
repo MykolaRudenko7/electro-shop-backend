@@ -2,16 +2,17 @@ import jwt from 'jsonwebtoken'
 import { tokenConfig } from '#data/config.js'
 import UserToken from '#models/UserToken.js'
 
-const { accessTokenExpires, accessTokenKey, refreshTokenExpires, refreshTokenKey } = tokenConfig
+const { accessTokenExpirationTime, accessTokenKey, refreshTokenExpirationTime, refreshTokenKey } =
+  tokenConfig
 
 class TokenService {
   async generateTokens(payload) {
     const accessToken = jwt.sign({ payload, access: true }, accessTokenKey, {
-      expiresIn: accessTokenExpires,
+      expiresIn: accessTokenExpirationTime,
     })
 
     const refreshToken = jwt.sign({ payload, refresh: true }, refreshTokenKey, {
-      expiresIn: refreshTokenExpires,
+      expiresIn: refreshTokenExpirationTime,
     })
 
     return { accessToken, refreshToken }
@@ -62,7 +63,7 @@ class TokenService {
     return isRefreshToken
   }
 
-  async handleSetResponse(res, userData, message) {
+  async sendAuthResponseWithTokens(res, userData, message) {
     const { accessToken, refreshToken, user } = userData
 
     res
@@ -77,12 +78,9 @@ class TokenService {
         maxAge: 15 * 60 * 1000,
       })
 
-    return (
-      res
-        // я тепер передаю тут і токени
-        .json({ success: true, message: message, user, accessToken, refreshToken })
-        .status(200)
-    )
+    return res
+      .json({ success: true, message: message, user, accessToken, refreshToken })
+      .status(200)
   }
 }
 

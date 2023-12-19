@@ -1,7 +1,7 @@
 import ApiError from '#exceptions/api-error.js'
 
 class CartController {
-  async shippingHandler(req, res, next) {
+  async handleShipping(req, res, next) {
     try {
       if (!req.body) {
         return ApiError.BadRequest('Body is empty')

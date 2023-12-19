@@ -1,8 +1,9 @@
 import nodemailer from 'nodemailer'
-import { appAddresses, nodemailerConfig } from '#data/config.js'
+import { appEndpoints } from '#data/appEndpoints.js'
+import { nodemailerConfig } from '#data/config.js'
 
 const { mailAddress, mailPassword, smprtHost, smprtPort } = nodemailerConfig
-const { backend } = appAddresses
+const { backend } = appEndpoints
 
 class MailService {
   constructor() {

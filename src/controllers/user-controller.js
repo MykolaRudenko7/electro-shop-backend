@@ -1,18 +1,18 @@
 import { validationResult } from 'express-validator'
-import { appAddresses } from '#data/config.js'
+import { appEndpoints } from '#data/appEndpoints.js'
 import TokenService from '#service/token-service.js'
 import UserService from '#service/user-service.js'
 import ApiError from '#exceptions/api-error.js'
 
-const { client } = appAddresses
+const { client } = appEndpoints
 
 class UserController {
   async signUp(req, res, next) {
     try {
-      const validateErrors = validationResult(req)
+      const validationErrors = validationResult(req)
 
-      if (!validateErrors.isEmpty()) {
-        return next(ApiError.BadRequest('Validate Error', validateErrors.array()))
+      if (!validationErrors.isEmpty()) {
+        return next(ApiError.BadRequest('Validate Error', validationErrors.array()))
       }
       const { name_newUser, email_newUser, password_newUser, mobileNumber_newUser } = await req.body
 
@@ -23,13 +23,13 @@ class UserController {
         mobileNumber_newUser,
       )
 
-      return TokenService.handleSetResponse(res, userData, 'Registration was successful')
+      return TokenService.sendAuthResponseWithTokens(res, userData, 'Registration was successful')
     } catch (error) {
       next(error)
     }
   }
 
-  async activateUser(req, res, next) {
+  async activateAccount(req, res, next) {
     try {
       const activationLink = req.params.link
       await UserService.activate(activationLink)
@@ -45,7 +45,7 @@ class UserController {
       const { email_signIn, password_signIn } = await req.body
       const userData = await UserService.signInUser(email_signIn, password_signIn)
 
-      return TokenService.handleSetResponse(res, userData, 'Log in successfully')
+      return TokenService.sendAuthResponseWithTokens(res, userData, 'Log in successfully')
     } catch (error) {
       next(error)
     }
@@ -70,7 +70,7 @@ class UserController {
 
       const userData = await UserService.updateRefreshToken(refreshToken)
 
-      return TokenService.handleSetResponse(res, userData, 'Refresh successful')
+      return TokenService.sendAuthResponseWithTokens(res, userData, 'Refresh successful')
     } catch (error) {
       next(error)
     }

@@ -20,13 +20,8 @@ export const nodemailerConfig = {
 export const tokenConfig = {
   accessTokenKey: process.env.ACCESS_TOKEN_KEY,
   refreshTokenKey: process.env.REFRESH_TOKEN_KEY,
-  accessTokenExpires: process.env.ACCESS_TOKEN_EXPIRES_IN,
-  refreshTokenExpires: process.env.REFRESH_TOKEN_EXPIRES_IN,
-}
-
-export const appAddresses = {
-  client: process.env.CLIENT_URL,
-  backend: process.env.BACKEND_URL,
+  accessTokenExpirationTime: process.env.ACCESS_TOKEN_EXPIRES_IN,
+  refreshTokenExpirationTime: process.env.REFRESH_TOKEN_EXPIRES_IN,
 }
 
 export const salt = process.env.SALT

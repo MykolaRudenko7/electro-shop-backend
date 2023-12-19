@@ -3,10 +3,11 @@ import bcrypt, { compare } from 'bcrypt'
 import TokenService from './token-service.js'
 import ApiError from '#exceptions/api-error.js'
 import MailService from './mail-service.js'
-import { appAddresses, salt } from '#data/config.js'
+import { salt } from '#data/config.js'
+import { appEndpoints } from '#data/appEndpoints.js'
 import User from '#models/User.js'
 
-const { backend } = appAddresses
+const { backend } = appEndpoints
 
 class UserService {
   async signUpUser(name, email, password, mobileNumber) {
@@ -57,24 +58,40 @@ class UserService {
   }
 
   async signInUser(email, password) {
-    const user = await User.findOne({ email }).select('+password')
+    const user = await this.getUserByEmail(email)
 
     if (!user) {
       throw ApiError.BadRequest('User with email does not exist')
     }
 
-    if (user.lockUntil === Infinity) {
-      throw ApiError.BadRequest('Account is locked. Please contact support.')
-    }
-
     if (user.lockUntil && user.lockUntil > Date.now()) {
       const minutesLeft = Math.ceil((user.lockUntil - Date.now()) / (60 * 1000))
-
       throw ApiError.BadRequest(
         `Too many login attempts. Please try again after ${minutesLeft} minutes.`,
       )
     }
 
+    await this.handleIncorrectPassword(user, password)
+    await this.resetLockAndLoginAttempts(user)
+
+    const { accessToken, refreshToken } = await TokenService.generateTokens(user._id, user.email)
+
+    await TokenService.saveRefreshToken(user._id, refreshToken)
+
+    return { accessToken, refreshToken, user }
+  }
+
+  async handleInvalidUser(user) {
+    if (!user) {
+      throw ApiError.BadRequest('User with this email does not exist')
+    }
+  }
+
+  async getUserByEmail(email) {
+    return await User.findOne({ email }).select('+password')
+  }
+
+  async handleIncorrectPassword(user, password) {
     const isPasswordCorrect = await compare(password, user.password)
 
     if (!isPasswordCorrect) {
@@ -85,23 +102,21 @@ class UserService {
       } else if (user.loginAttempts >= 10) {
         user.lockUntil = Infinity
       }
+
       await user.save()
+
       const remainingAttempts = 10 - user.loginAttempts
 
       throw ApiError.BadRequest(
         `Password is incorrect. Remaining attempts: ${remainingAttempts + 1}`,
       )
     }
+  }
 
+  async resetLockAndLoginAttempts(user) {
     user.loginAttempts = 0
     user.lockUntil = null
     await user.save()
-
-    const { accessToken, refreshToken } = await TokenService.generateTokens(user._id, user.email)
-
-    await TokenService.saveRefreshToken(user._id, refreshToken)
-
-    return { accessToken, refreshToken, user }
   }
 
   async logOutUser(refreshToken) {
