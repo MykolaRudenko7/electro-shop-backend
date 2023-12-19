@@ -1,10 +1,10 @@
 import { v4 } from 'uuid'
 import bcrypt, { compare } from 'bcrypt'
 import TokenService from './token-service.js'
-import ApiError from '../exceptions/api-error.js'
+import ApiError from '#exceptions/api-error.js'
 import MailService from './mail-service.js'
-import { appAddresses, salt } from '../data/config.js'
-import User from '../models/User.js'
+import { appAddresses, salt } from '#data/config.js'
+import User from '#models/User.js'
 
 const { backend } = appAddresses
 

@@ -1,9 +1,9 @@
 import { Router } from 'express'
 import { body } from 'express-validator'
-import ProductsController from '../controllers/products-controller.js'
-import UserController from '../controllers/user-controller.js'
-import CartController from '../controllers/cart-controller.js'
-import authMiddleware from '../middlewares/auth-middleware.js'
+import ProductsController from '#controllers/products-controller.js'
+import UserController from '#controllers/user-controller.js'
+import CartController from '#controllers/cart-controller.js'
+import authMiddleware from '#middlewares/auth-middleware.js'
 
 const router = new Router()
 

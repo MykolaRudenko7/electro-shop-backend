@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
-import { tokenConfig } from '../data/config.js'
-import UserToken from '../models/UserToken.js'
+import { tokenConfig } from '#data/config.js'
+import UserToken from '#models/UserToken.js'
 
 const { accessTokenExpires, accessTokenKey, refreshTokenExpires, refreshTokenKey } = tokenConfig
 

@@ -1,4 +1,4 @@
-import ApiError from '../exceptions/api-error.js'
+import ApiError from '#exceptions/api-error.js'
 
 class CartController {
   async shippingHandler(req, res, next) {

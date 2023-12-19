@@ -1,6 +1,6 @@
-import ApiError from '../exceptions/api-error.js'
-import Laptop from '../models/Laptop.js'
-import NewProduct from '../models/NewProduct.js'
+import ApiError from '#exceptions/api-error.js'
+import Laptop from '#models/Laptop.js'
+import NewProduct from '#models/NewProduct.js'
 
 class ProductsController {
   async getLaptops(req, res, next) {

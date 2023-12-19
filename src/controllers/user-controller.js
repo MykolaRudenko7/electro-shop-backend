@@ -1,8 +1,8 @@
 import { validationResult } from 'express-validator'
-import { appAddresses } from '../data/config.js'
-import TokenService from '../service/token-service.js'
-import UserService from '../service/user-service.js'
-import ApiError from '../exceptions/api-error.js'
+import { appAddresses } from '#data/config.js'
+import TokenService from '#service/token-service.js'
+import UserService from '#service/user-service.js'
+import ApiError from '#exceptions/api-error.js'
 
 const { client } = appAddresses
 
