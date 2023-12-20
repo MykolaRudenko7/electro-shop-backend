@@ -11,10 +11,10 @@ const { backend } = appEndpoints
 
 class UserService {
   async signUpUser(name, email, password, mobileNumber) {
-    const userExistsByEmail = await User.findOne({ email })
-    const userExistsByPhone = await User.findOne({ mobileNumber })
+    const doesUserExistByEmail = await User.findOne({ email })
+    const doesUserExistByPhone = await User.findOne({ mobileNumber })
 
-    if (userExistsByEmail || userExistsByPhone) {
+    if (doesUserExistByEmail || doesUserExistByPhone) {
       throw ApiError.BadRequest('User with this email or phone already exists')
     }
 
