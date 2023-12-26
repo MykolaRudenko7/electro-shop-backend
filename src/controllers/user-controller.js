@@ -1,19 +1,12 @@
-import { validationResult } from 'express-validator'
 import { appEndpoints } from '#data/appEndpoints.js'
 import TokenService from '#service/token-service.js'
 import UserService from '#service/user-service.js'
-import ApiError from '#exceptions/api-error.js'
 
 const { client } = appEndpoints
 
 class UserController {
   async signUp(req, res, next) {
     try {
-      const validationErrors = validationResult(req)
-
-      if (!validationErrors.isEmpty()) {
-        return next(ApiError.BadRequest('Validate Error', validationErrors.array()))
-      }
       const { name_newUser, email_newUser, password_newUser, mobileNumber_newUser } = await req.body
 
       const userData = await UserService.signUpUser(

@@ -1,6 +1,6 @@
 import { body, validationResult } from 'express-validator'
 
-export const userValidationRules = [
+export const userValidationRules = () => [
   body('name_newUser').isLength({ min: 4, max: 20 }),
   body('email_newUser').isEmail(),
   body('password_newUser').isLength({ min: 6, max: 30 }),
@@ -8,8 +8,6 @@ export const userValidationRules = [
 ]
 
 export const validateNewUser = (req, res, next) => {
-  userValidationRules.forEach((rule) => rule(req))
-
   const errors = validationResult(req)
 
   if (!errors.isEmpty()) {
