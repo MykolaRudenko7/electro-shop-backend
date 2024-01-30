@@ -1,4 +1,4 @@
-import { appEndpoints } from '#data/appEndpoints.js'
+import appEndpoints from '#data/appEndpoints.js'
 import TokenService from '#service/token-service.js'
 import UserService from '#service/user-service.js'
 
@@ -19,6 +19,7 @@ class UserController {
       return TokenService.sendAuthResponseWithTokens(res, userData, 'Registration was successful')
     } catch (error) {
       next(error)
+      return null
     }
   }
 
@@ -30,6 +31,7 @@ class UserController {
       return res.redirect(client)
     } catch (error) {
       next(error)
+      return null
     }
   }
 
@@ -41,19 +43,21 @@ class UserController {
       return TokenService.sendAuthResponseWithTokens(res, userData, 'Log in successfully')
     } catch (error) {
       next(error)
+      return null
     }
   }
 
   async logOut(req, res, next) {
     try {
       const { refreshToken } = req.cookies
-      const deleteRefreshToken = await UserService.logOutUser(refreshToken)
+      await UserService.logOutUser(refreshToken)
       res.clearCookie('accessToken')
       res.clearCookie('refreshToken')
 
       return res.json({ success: true, message: 'Log out successfully' }).status(200)
     } catch (error) {
       next(error)
+      return null
     }
   }
 
@@ -66,6 +70,7 @@ class UserController {
       return TokenService.sendAuthResponseWithTokens(res, userData, 'Refresh successful')
     } catch (error) {
       next(error)
+      return null
     }
   }
 
@@ -76,6 +81,7 @@ class UserController {
       return res.json({ success: true, message: 'Success', user })
     } catch (error) {
       next(error)
+      return null
     }
   }
 }
