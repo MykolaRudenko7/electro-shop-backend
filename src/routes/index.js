@@ -19,4 +19,8 @@ router.get('/profile', authMiddleware, UserController.getUserInfo)
 router.get('/newProducts', ProductsController.getNewProducts)
 router.get('/laptops', ProductsController.getLaptops)
 
+router.get('/test', async (req, res) => {
+  res.status(200).send('Test OK!')
+})
+
 export default router
