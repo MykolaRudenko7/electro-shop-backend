@@ -1,7 +1,7 @@
 import ApiError from '#exceptions/api-error.js'
 import TokenService from '#service/token-service.js'
 
-export default async function (req, res, next) {
+export default async function authMiddleware(req, res, next) {
   try {
     const { accessToken } = req.cookies
 
@@ -16,7 +16,7 @@ export default async function (req, res, next) {
     }
 
     req.userId = isAccessTokenValid.payload
-    next()
+    return next()
   } catch (error) {
     return next(ApiError.UnauthorizedError())
   }

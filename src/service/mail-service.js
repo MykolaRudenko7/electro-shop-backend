@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer'
-import { appEndpoints } from '#data/appEndpoints.js'
+import appEndpoints from '#data/appEndpoints.js'
 import { nodemailerConfig } from '#data/config.js'
 
 const { mailAddress, mailPassword, smprtHost, smprtPort } = nodemailerConfig
