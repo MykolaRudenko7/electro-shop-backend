@@ -3,14 +3,15 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  extends: ['airbnb-base', 'plugin:prettier/recommended'],
-  plugins: ['prettier'],
+  extends: ['airbnb-base', 'plugin:prettier/recommended', 'plugin:jest/recommended'],
+  plugins: ['prettier', 'jest'],
   overrides: [
     {
       env: {
+        jest: true,
         node: true,
       },
-      files: ['.eslintrc.{js,cjs}'],
+      files: ['.eslintrc.{js,cjs}', '**/*.spec.js', '**/*.spec.jsx'],
       parserOptions: {
         sourceType: 'script',
       },
@@ -31,6 +32,7 @@ module.exports = {
     'import/resolver': {
       alias: {
         map: [
+          ['#server', './server.js'],
           ['#utils', './src/utils'],
           ['#routes', './src/routes'],
           ['#middlewares', './src/middlewares'],

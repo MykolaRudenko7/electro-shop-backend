@@ -29,10 +29,12 @@ app.use(errorMiddleware)
 const start = async () => {
   try {
     await connectToMongoDB()
-    app.listen(port, () => console.log(`Listening on port ${port}...`))
+    app.listen(port)
   } catch (error) {
     console.log('Error:', error)
   }
 }
 
 start()
+
+export default app
