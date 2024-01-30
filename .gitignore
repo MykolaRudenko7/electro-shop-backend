@@ -1,4 +1,4 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# Ignore .env files
 .env
 # dependencies
 /node_modules
@@ -22,3 +22,4 @@ yarn-error.log*
 # generate-react-cli
 generate-react-cli.json
 /templates
+.env
