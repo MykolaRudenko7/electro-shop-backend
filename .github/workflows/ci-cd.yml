@@ -1,5 +1,4 @@
 name: Deploy Node.js Backend
-
 on:
   push:
     branches: [main]
@@ -46,9 +45,6 @@ jobs:
       - name: Run linter
         run: npm run lint
 
-      - name: Start Backend
-        run: npm run start
-
       - name: Wait for Backend to Start
         run: |
-          curl --retry-connrefused --retry-delay 10 --retry-max-time 60 -v http://localhost:3001/laptops
+          curl --retry-connrefused --retry-delay 10 --retry-max-time 60 -v http://127.0.0.1:3001/laptops
