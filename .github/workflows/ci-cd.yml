@@ -47,3 +47,14 @@ jobs:
 
       - name: Run test
         run: npm run test
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        run: |
+          docker build -t mykolarud/backend_img:latest .
+          docker push mykolarud/backend_img:latest
