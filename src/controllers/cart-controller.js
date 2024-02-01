@@ -9,8 +9,7 @@ class CartController {
 
       return res.json({ success: true, message: 'Success' })
     } catch (error) {
-      next(error)
-      return null
+      return next(error)
     }
   }
 }
