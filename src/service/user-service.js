@@ -1,5 +1,5 @@
 import { v4 } from 'uuid'
-import bcrypt, { compare } from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import ApiError from '#exceptions/api-error.js'
 import { salt } from '#data/config.js'
 import appEndpoints from '#data/appEndpoints.js'
@@ -8,6 +8,7 @@ import MailService from './mail-service.js'
 import TokenService from './token-service.js'
 
 const { backend } = appEndpoints
+const { compare } = bcrypt
 
 class UserService {
   async signUpUser(name, email, password, mobileNumber) {
