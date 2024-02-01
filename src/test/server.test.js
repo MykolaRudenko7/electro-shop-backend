@@ -6,15 +6,15 @@ import app from '#server'
 const request = supertest(app)
 
 describe('Test API requests', () => {
-  let server
+  let testServer
 
   beforeAll(() => {
-    server = app.listen()
+    testServer = app.listen()
   })
 
   afterAll(() => {
     return new Promise((resolve) => {
-      server.close(() => {
+      testServer.close(() => {
         mongoose.connection.close()
         resolve()
       })

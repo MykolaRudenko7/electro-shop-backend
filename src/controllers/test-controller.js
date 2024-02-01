@@ -3,8 +3,7 @@ class TestController {
     try {
       return await res.status(200).send('Test OK!')
     } catch (error) {
-      next(error)
-      return null
+      return next(error)
     }
   }
 }

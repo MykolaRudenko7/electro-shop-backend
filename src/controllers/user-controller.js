@@ -18,8 +18,7 @@ class UserController {
 
       return TokenService.sendAuthResponseWithTokens(res, userData, 'Registration was successful')
     } catch (error) {
-      next(error)
-      return null
+      return next(error)
     }
   }
 
@@ -30,8 +29,7 @@ class UserController {
 
       return res.redirect(client)
     } catch (error) {
-      next(error)
-      return null
+      return next(error)
     }
   }
 
@@ -42,8 +40,7 @@ class UserController {
 
       return TokenService.sendAuthResponseWithTokens(res, userData, 'Log in successfully')
     } catch (error) {
-      next(error)
-      return null
+      return next(error)
     }
   }
 
@@ -56,8 +53,7 @@ class UserController {
 
       return res.json({ success: true, message: 'Log out successfully' }).status(200)
     } catch (error) {
-      next(error)
-      return null
+      return next(error)
     }
   }
 
@@ -69,8 +65,7 @@ class UserController {
 
       return TokenService.sendAuthResponseWithTokens(res, userData, 'Refresh successful')
     } catch (error) {
-      next(error)
-      return null
+      return next(error)
     }
   }
 
@@ -80,8 +75,7 @@ class UserController {
 
       return res.json({ success: true, message: 'Success', user })
     } catch (error) {
-      next(error)
-      return null
+      return next(error)
     }
   }
 }

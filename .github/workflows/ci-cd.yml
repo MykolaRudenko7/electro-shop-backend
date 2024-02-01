@@ -58,3 +58,9 @@ jobs:
         run: |
           docker build -t mykolarud/backend_img:latest .
           docker push mykolarud/backend_img:latest
+
+      - name: Deploy Docker Image
+        env:
+          deploy_url: ${{ secrets.RENDER_DEPLOY_DOCKER_HOOK_URL }}
+        run: |
+          curl "$deploy_url"

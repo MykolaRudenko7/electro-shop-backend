@@ -13,8 +13,7 @@ class ProductsController {
 
       return res.json(laptops).status(200)
     } catch (error) {
-      next(error)
-      return null
+      return next(error)
     }
   }
 
@@ -28,8 +27,7 @@ class ProductsController {
 
       return res.json(newProducts).status(200)
     } catch (error) {
-      next(error)
-      return null
+      return next(error)
     }
   }
 }
