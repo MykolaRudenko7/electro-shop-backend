@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 import express from 'express'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
@@ -5,11 +7,11 @@ import { config } from 'dotenv'
 import connectToMongoDB from '#utils/db.js'
 import router from '#routes/index.js'
 import errorMiddleware from '#middlewares/error-middleware.js'
-import { appEndpoints } from '#data/appEndpoints.js'
+import appEndpoints from '#data/appEndpoints.js'
 
 config()
 
-const PORT = process.env.PORT
+const { PORT } = process.env
 const port = PORT || 3002
 const app = express()
 
@@ -27,10 +29,12 @@ app.use(errorMiddleware)
 const start = async () => {
   try {
     await connectToMongoDB()
-    app.listen(port, () => console.log(`Listening on port ${port}...`))
+    app.listen(port)
   } catch (error) {
     console.log('Error:', error)
   }
 }
 
 start()
+
+export default app

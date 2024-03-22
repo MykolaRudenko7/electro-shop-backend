@@ -2,7 +2,10 @@ import { config } from 'dotenv'
 
 config()
 
-export const appEndpoints = {
+const appEndpoints = {
   client: process.env.CLIENT_URL,
   backend: process.env.BACKEND_URL,
+  testUrl: process.env.TEST_URL,
 }
+
+export default appEndpoints

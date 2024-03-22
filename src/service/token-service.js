@@ -78,9 +78,7 @@ class TokenService {
         maxAge: 15 * 60 * 1000,
       })
 
-    return res
-      .json({ success: true, message: message, user, accessToken, refreshToken })
-      .status(200)
+    return res.json({ success: true, message, user, accessToken, refreshToken }).status(200)
   }
 }
 
