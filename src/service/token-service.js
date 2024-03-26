@@ -78,7 +78,10 @@ class TokenService {
         maxAge: 15 * 60 * 1000,
       })
 
-    return res.json({ success: true, message, user, accessToken, refreshToken }).status(200)
+    res.setHeader('Authorization', `Bearer ${accessToken}`)
+    res.setHeader('X-Refresh-Token', refreshToken)
+
+    return res.status(200).json({ success: true, message, user })
   }
 }
 

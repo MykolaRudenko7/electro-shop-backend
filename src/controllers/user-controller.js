@@ -59,8 +59,7 @@ class UserController {
 
   async refresh(req, res, next) {
     try {
-      const refreshToken = req.body.refreshToken.value
-
+      const refreshToken = req.headers['x-refresh-token']
       const userData = await UserService.updateRefreshToken(refreshToken)
 
       return TokenService.sendAuthResponseWithTokens(res, userData, 'Refresh successful')
